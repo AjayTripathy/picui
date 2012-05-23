@@ -24,7 +24,7 @@
 
 		<script>
 			$(document).ready(function () {
-				var server = "http://localhost:8080"; //FILL ME IN WITH THE SERVER LOCATION!!!!
+				var server = "http://localhost"; //FILL ME IN WITH THE SERVER LOCATION!!!!
 
 				$("#submitimg").click(function () {
 					console.log("submitting an image");
@@ -36,18 +36,11 @@
 
 				$("#submitcolor").click(function () {
 					console.log("submitting a color");
-					$.ajax({
-						url: server+"/match",
-						dataType: "jsonp",
-						data: {
-							color: [$("#colorPicker").val()]
-						},
-						success: function (data) { //return: an
-							console.log("got back photos");
-							console.log(data)
-							displayImgs(data)
-						}
-					});
+					$.post(server+"/match", {colors: [$("#colorPicker").val()]}, function (data) {
+						console.log("matched color(s)");
+						console.log(data)
+						displayImgs(data);
+					})
 				});
 
 				$(document).keydown(function (e) {
