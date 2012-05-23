@@ -2,7 +2,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Picui--PROOF OF CONCEPT</title>
-		<meta name="description" content="A framework for color image search">>
+		<meta name="description" content="A framework for color image search">
 		<meta name="author" content="Ajay Tripathy, Kevin Hwang, Sridatta Thatipamala">
 
 		<link href="css/bootstrap.css" rel="stylesheet">
@@ -41,6 +41,8 @@
 						},
 						success: function (data) { //return: an
 							console.log("got back photos");
+							console.log(data)
+							displayImgs(data)
 						}
 					});
 				});
@@ -55,12 +57,45 @@
 					*/
 
 
-				
-				$("#resultsDiv").imagesLoaded(function () {
-					$("#resultsDiv").masonry({
-						itemSelector: ".item"
+				var masonizeImages = function () {
+					$("#resultsDiv").imagesLoaded(function () {
+						$("#resultsDiv").masonry({
+							itemSelector: ".item"
+						});
 					});
-				});
+				}
+
+				var loadImages = function (data) { //data is an array of images
+					for (i in data) {
+						var imgSrc = data[i];
+						var toAppend = "<div class='item'><a href='"+imgSrc+"' target='_blank'><img src='"+imgSrc+"'></img></a></div>";
+						$("#resultsDiv").append(toAppend);
+					}
+					masonizeImages();
+				}
+
+				var clearImages = function () {
+					$("#resultsDiv").empty()
+				}
+
+				var displayImgs = function (data) {
+					clearImages();
+					loadImages(data);
+				}
+
+				var testImgs = []
+				testImgs.push("http://denver.mylittlefacewhen.com/media/f/img/mlfw4796-1335816425456.png");
+				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/img/mlfw3280-1330720074608.png");
+				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/img/mlfw282_tumblr_lkuf6sHX4s1qj4uijo1_500.png");
+				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/img/mlfw4999-13374372996473.gif");
+				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/rsz/mlfw4974_huge.png");
+				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/img/mlfw4881-roflbot5.jpg");
+				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/img/mlfw5003-tumblr_lk6wz3tbxg1qaha6c.png");
+				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/img/mlfw4822-13369295685608.png");
+
+
+				loadImages(testImgs)
+
 
 				
 			});
@@ -80,7 +115,7 @@
 					<h2>Upload here</h2>
 					<div class="well">
 						<label>Link to an image</label>
-						<input type="text" id="imglocation" class="span3" placeholder="http://www.imgur.com/rainbowdash.jpg">
+						<input type="text" id="imglocation" class="span3" placeholder="http://www.imgur.com/rainbowdash.jpg"></input>
 						<p></p>
 						<button type="submit" id="submitimg" class="btn btn-primary">Submit</button>
 					</div>
@@ -96,16 +131,13 @@
 				</div>
 			</div>
 
-			<div id="resultsDiv">
-				<div class="item"><img src="http://denver.mylittlefacewhen.com/media/f/img/mlfw4796-1335816425456.png"></img></div>
-				<div class="item"><img src="http://scranton.mylittlefacewhen.com/media/f/img/mlfw3280-1330720074608.png"></img></div>
-				<div class="item"><img src="http://scranton.mylittlefacewhen.com/media/f/img/mlfw282_tumblr_lkuf6sHX4s1qj4uijo1_500.png"></img></div>
-				<div class="item"><img src="http://scranton.mylittlefacewhen.com/media/f/img/mlfw4999-13374372996473.gif"></img></div>
-				<div class="item"><img src="http://scranton.mylittlefacewhen.com/media/f/rsz/mlfw4974_huge.png"></img></div>
-				<div class="item"><img src="http://scranton.mylittlefacewhen.com/media/f/img/mlfw4881-roflbot5.jpg"></img></div>
-				<div class="item"><img src="http://scranton.mylittlefacewhen.com/media/f/img/mlfw5003-tumblr_lk6wz3tbxg1qaha6c.png"></img></div>
-				<div class="item"><img src="http://scranton.mylittlefacewhen.com/media/f/img/mlfw4822-13369295685608.png"></img></div>
+			<div class="row">
+				<div class="span12">
+					<h2>Results will be displayed below.</h2>
+				</div>
+			</div>
 
+			<div id="resultsDiv" class="well">
 			</div>
 
 		<hr>
