@@ -13,6 +13,7 @@ class upload:
   def POST(self):
     i = web.input()
     url = str(i.url)
+    print url
     #colorList = picui(url)
     #TODO: Put list of colors in database    
     return url
