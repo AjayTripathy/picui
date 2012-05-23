@@ -28,6 +28,7 @@
 					console.log("submitting an image");
 					$.post(server+"/upload", {url: $("#imglocation").val()}, function (data) {
 						console.log("inserted photo");
+						$("#imglocation").val("");
 					});
 				});
 
@@ -46,6 +47,18 @@
 						}
 					});
 				});
+
+				$(document).keydown(function (e) {
+					if (e.which === 13) {
+						var focusId = $(document.activeElement).attr('id');
+						console.log(focusId)
+						if (focusId === "imglocation") {
+							$("#submitimg").click();
+						} else if (focusId === "colorPicker") {
+							$("#submitcolor").click();
+						}
+					}
+				})
 
 				$("#colorPicker").miniColors();
 
@@ -94,7 +107,8 @@
 				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/img/mlfw4822-13369295685608.png");
 
 
-				loadImages(testImgs)
+				//Test the masonry
+				//loadImages(testImgs)
 
 
 				
