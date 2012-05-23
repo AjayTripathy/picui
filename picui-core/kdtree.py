@@ -101,7 +101,7 @@ class KDTree():
     def add(self, point):
        
         def addHelper(point, depth, currNode):
-            axis = depth % len(point_list[0])
+            axis = depth % len(point)
             comparisonNumber = currNode.point[axis]
             if (comparisonNumber < point[axis]):
                 if (currNode.left != None):
@@ -184,3 +184,11 @@ class KDTree():
         
         #print statistics
         return result
+
+tree = KDTree.construct_from_data(None)
+tree.add((1, 2))
+tree.add((4, 7))
+tree.add((3, 4))
+point = (1, 5)
+nearest = tree.query(point, t=4) 
+print nearest
