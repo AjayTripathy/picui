@@ -1,0 +1,84 @@
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Picui--PROOF OF CONCEPT</title>
+		<meta name="description" content="A framework for color image search">>
+		<meta name="author" content="Ajay Tripathy, Kevin Hwang, Sridatta Thatipamala">
+
+		<link href="bootstrap.css" rel="stylesheet">
+		<link href="bootstrap-responsive.css" rel="stylesheet">
+		<link href="jquery.miniColors.css" rel="stylesheet">
+
+		<link href="index.css" rel="stylesheet">
+
+		<script src="jquery-1.7.2.min.js"></script>
+		<script src="jquery.miniColors.js"></script>
+
+		<!-- HTML5 shim which I have never testedß -->
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+
+		<script>
+			$(document).ready(function () {
+				var server = ""; //FILL ME IN WITH THE SERVER LOCATION!!!!
+
+				$("#submitimg").click(function () {
+					console.log("submitting an image");
+					$.post(server+"/upload", {url: $("#imglocation").val()}, function () {
+						console.log("inserted photo");
+					});
+				});
+
+				$("#submitcolor").click(function () {
+					console.log("submitting a color");
+					$.ajax({
+						url: server+"/match",
+						dataType: "jsonp",
+						success: function (data) {
+							console.log("got back photos");
+						}
+					});
+				});
+
+				$("#colorPicker").miniColors();
+			});
+
+		</script>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="hero-unit">
+				<h1>Picui</h1>
+				<p>This is a pretty simple proof of concept. Upload images, then search for them via primary color.</p>
+			</div>
+
+			<div class="row">
+				<div class="span6">
+					<h2>Upload here</h2>
+					<div class="well">
+						<label>Link to an image</label>
+						<input type="text" id="imglocation" class="span3" placeholder="http://www.imgur.com/rainbowdash.jpg">
+						<p></p>
+						<button type="submit" id="submitimg" class="btn btn-primary">Submit</button>
+					</div>
+				</div>
+				<div class="span6">
+					<h2>Search here</h2>
+					<div class="well">
+						<label>Pick a color below</label>
+						<input id="colorPicker"></input>
+						<p></p>
+						<button type="submit" id="submitcolor" class="btn btn-primary">Submit</button>
+					</div>
+				</div>
+			</div>
+		<hr>
+		<footer>
+			<p>&copy; 2012</p>
+		</footer>
+		</div>
+	</body>
+</html>
+
