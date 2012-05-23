@@ -189,13 +189,3 @@ class KDTree():
         #print statistics
         return result
 
-tree = KDTree.construct_from_data(None)
-tree.add(Point( (1, 2), {'correct': 'true'} ))
-tree.add(Point( (4, 7), {} ))
-tree.add(Point( (3, 4), {} ))
-point = (1, 5)
-nearest = tree.query(point, t=4) 
-print nearest
-for p in nearest:
-  print p.point
-  print p.data
