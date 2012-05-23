@@ -1,6 +1,16 @@
 body {
-	font-family: Helvetica, Arial, sans-serif;
+	font-family: 'Droid Sans',Helvetica, sans-serif;
 	padding-top: 60px;
+	background: #181818;
+}
+
+.hero-unit h1 {
+	font-family: 'Crushed', serif;
+	color: #C9446F;
+}
+
+h2 {
+	color: #D8C0A8;
 }
 
 .item {
@@ -24,4 +34,20 @@ body {
 	-webkit-box-shadow: 2px 2px 10px rgba(50, 50, 50, 0.74);
 	-moz-box-shadow:    2px 2px 10px rgba(50, 50, 50, 0.74);
 	box-shadow:         2px 2px 10px rgba(50, 50, 50, 0.74);
+
+	-webkit-transform: scale(1.1);
+	-moz-transform: scale(1.1);
+	transform: scale(1.1);
+}
+
+.btn-primary {
+	background: #C9446F;
+}
+
+.btn-primary:hover {
+	background: #786060;
+}
+
+#footerText {
+	color: #D8C0A8;
 }

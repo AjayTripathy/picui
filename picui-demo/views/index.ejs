@@ -5,15 +5,17 @@
 		<meta name="description" content="A framework for color image search">
 		<meta name="author" content="Ajay Tripathy, Kevin Hwang, Sridatta Thatipamala">
 
-		<link href="css/bootstrap.css" rel="stylesheet">
-		<link href="css/bootstrap-responsive.css" rel="stylesheet">
-		<link href="css/jquery.miniColors.css" rel="stylesheet">
+		<link href="static/css/bootstrap.css" rel="stylesheet">
+		<link href="static/css/bootstrap-responsive.css" rel="stylesheet">
+		<link href="static/css/jquery.miniColors.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Crushed">
+		<link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
 
-		<link href="css/index.css" rel="stylesheet">
+		<link href="static/css/index.css" rel="stylesheet">
 
-		<script src="js/jquery-1.7.2.min.js"></script>
-		<script src="js/jquery.miniColors.js"></script>
-		<script src="js/jquery.masonry.min.js"></script>
+		<script src="static/js/jquery-1.7.2.min.js"></script>
+		<script src="static/js/jquery.miniColors.js"></script>
+		<script src="static/js/jquery.masonry.min.js"></script>
 
 		<!-- HTML5 shim which I have never testedß -->
 		<!--[if lt IE 9]>
@@ -26,7 +28,7 @@
 
 				$("#submitimg").click(function () {
 					console.log("submitting an image");
-					$.post(server+"/upload", {url: $("#imglocation").val()}, function (data) {
+					$.post(server+"/add", {url: $("#imglocation").val()}, function (data) {
 						console.log("inserted photo");
 						$("#imglocation").val("");
 					});
@@ -38,7 +40,7 @@
 						url: server+"/match",
 						dataType: "jsonp",
 						data: {
-							color: $("#colorPicker").val()
+							color: [$("#colorPicker").val()]
 						},
 						success: function (data) { //return: an
 							console.log("got back photos");
@@ -108,7 +110,7 @@
 
 
 				//Test the masonry
-				//loadImages(testImgs)
+				loadImages(testImgs)
 
 
 				
@@ -156,7 +158,7 @@
 
 		<hr>
 		<footer>
-			<p>&copy; 2012</p>
+			<p id="footerText">Come and view us on <a target="_blank" href="https://github.com/AjayTripathy/picui">Github</a>!</p>
 		</footer>
 		</div>
 	</body>

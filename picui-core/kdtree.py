@@ -30,6 +30,11 @@ class KDTreeNode():
     def is_leaf(self):
         return (self.left == None and self.right == None)
 
+class Point():
+    def __init__(self, point, data=None):
+        self.point = point
+        self.data = data
+
 class KDTreeNeighbours():
     """ Internal structure used in nearest-neighbours search.
     """
@@ -46,7 +51,7 @@ class KDTreeNeighbours():
             self.largest_distance = self.current_best[self.t-1][1]
 
     def add(self, point):
-        sd = square_distance(point, self.query_point)
+        sd = square_distance(point.point, self.query_point)
         # run through current_best, try to find appropriate place
         for i, e in enumerate(self.current_best):
             if i == self.t:
@@ -83,11 +88,11 @@ class KDTree():
                 return None
 
             # select axis based on depth so that axis cycles through all valid values
-            axis = depth % len(point_list[0]) # assumes all points have the same dimension
+            axis = depth % len(point_list[0].point) # assumes all points have the same dimension
 
             # sort point list and choose median as pivot point,
             # TODO: better selection method, linear-time selection, distribution
-            point_list.sort(key=lambda point: point[axis])
+            point_list.sort(key=lambda point: point.point[axis])
             median = len(point_list)/2 # choose median
 
             # create node and recursively construct subtrees
@@ -99,11 +104,10 @@ class KDTree():
         self.root_node = build_kdtree(data, depth=0)
 
     def add(self, point):
-       
         def addHelper(point, depth, currNode):
-            axis = depth % len(point)
-            comparisonNumber = currNode.point[axis]
-            if (comparisonNumber < point[axis]):
+            axis = depth % len(point.point)
+            comparisonNumber = currNode.point.point[axis]
+            if (comparisonNumber < point.point[axis]):
                 if (currNode.left != None):
                   addHelper(point, depth + 1, currNode.left)
                 else:
@@ -151,7 +155,7 @@ class KDTree():
             
             # compare query_point and point of current node in selected dimension
             # and figure out which subtree is farther than the other
-            if query_point[axis] < node.point[axis]:
+            if query_point[axis] < node.point.point[axis]:
                 near_subtree = node.left
                 far_subtree = node.right
             else:
@@ -168,7 +172,7 @@ class KDTree():
             
             # check whether there could be any points on the other side of the
             # splitting plane that are closer to the query point than the current best
-            if (node.point[axis] - query_point[axis])**2 < best_neighbours.largest_distance:
+            if (node.point.point[axis] - query_point[axis])**2 < best_neighbours.largest_distance:
                 #statistics['far_search'] += 1
                 nn_search(far_subtree, query_point, t, depth+1, best_neighbours)
             
@@ -186,9 +190,12 @@ class KDTree():
         return result
 
 tree = KDTree.construct_from_data(None)
-tree.add((1, 2))
-tree.add((4, 7))
-tree.add((3, 4))
+tree.add(Point( (1, 2), {'correct': 'true'} ))
+tree.add(Point( (4, 7), {} ))
+tree.add(Point( (3, 4), {} ))
 point = (1, 5)
 nearest = tree.query(point, t=4) 
 print nearest
+for p in nearest:
+  print p.point
+  print p.data
