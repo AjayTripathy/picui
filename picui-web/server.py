@@ -1,4 +1,5 @@
 import web
+import json
 
 
 urls = ( 
@@ -14,13 +15,17 @@ class upload:
     url = str(i.url)
     #colorList = picui(url)
     #TODO: Put list of colors in database    
-    return 'Success' 
+    return url
 
 class match:
   def GET(self):
     i = web.input()
-    color = str(i.color) 
-
+    color = str(i.color)
+    callback = str(i.callback)
+    #TODO: find appropriate colors in the database
+    response = {'color': color}
+    response = json.dumps(response)
+    return "%s(%s)" % (callback, response) 
 
 if __name__ == "__main__":
   app.run()
