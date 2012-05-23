@@ -1,0 +1,3 @@
+[submodule "picui-core/colorific"]
+	path = picui-core/colorific
+	url = git@github.com:sridatta/colorific.git
