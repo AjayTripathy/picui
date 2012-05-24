@@ -122,7 +122,11 @@ class KDTree():
         else:
             self.root_node = KDTreeNode(point=point, left=None, right=None)
             
- 
+    
+    @staticmethod
+    def clone_tree(tree):
+        return KDTree.construct_from_data(tree.get_points)
+
     @staticmethod
     def construct_from_data(data):
         tree = KDTree(data)
