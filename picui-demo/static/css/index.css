@@ -51,3 +51,7 @@ h2 {
 #footerText {
 	color: #D8C0A8;
 }
+
+#footerText a {
+	color: #C9446F;
+}

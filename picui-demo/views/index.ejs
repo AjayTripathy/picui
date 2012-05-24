@@ -45,7 +45,7 @@
 
 				$("#submitcolor").click(function () {
 					console.log("submitting a color");
-					$.post(server+"/match", {colors: [$("#colorPicker").val()], id: $.cookie('id'), depth: 5}, function (data) {
+					$.post(server+"/match", {colors: [$("#colorPicker").val()], id: $.cookie('id'), depth: 20}, function (data) {
 						console.log("matched color(s)");
 						console.log(data)
 						displayImgs(data);
