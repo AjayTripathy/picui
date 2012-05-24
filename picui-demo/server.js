@@ -20,7 +20,7 @@ server.set('views', __dirname + "/views");
 server.use("/static", express.static(__dirname + "/static"));
 
 //pointer to the piqui-core server
-var coreServer = 'http://www.google.com'; 
+var coreServer = 'http://www.writebetterwith.us:8080'; 
 
 server.get("/", function (req, res) {
 	res.render("index");
@@ -33,7 +33,7 @@ server.post("/add", function (req, res) {
 	//relay to picui-core and then send back the body, which will be OK or something
 	request.post({
 		uri: coreServer+"/add",
-		body: JSON.stringify({'url' : url, 'treeName' : id})
+		form: {'url' : url, 'treeName' : id}
 	}, function (error, response, body) {
 		console.log("sent woo");
 		if (response.statusCode !== 200) {
@@ -51,9 +51,9 @@ server.post("/match", function (req, res) {
 	var depth = req.body.depth;
 	console.log(colors);
 	//relay this to piqui-core, send back a list of images
-	request.post({
+	request.get({
 		uri: coreServer+"/match",
-		body: JSON.stringify({'colors' : colors, 'limit' : depth, 'treeName' : id })
+		qs: {'colors' : JSON.stringify(colors), 'limit' : depth, 'treeName' : id }
 	}, function (error, response, body) {
 		console.log("sent");
 		if (response.statusCode !== 200) {

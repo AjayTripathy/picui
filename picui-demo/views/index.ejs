@@ -50,7 +50,7 @@
 
 				$("#submitcolor").click(function () {
 					console.log("submitting a color");
-					$.post(server+"/match", {colors: [$("#colorPicker").val()], id: $.cookie('id'), depth: 20}, function (data) {
+					$.post(server+"/match", {colors: [$("#colorPicker").val()], id: $.cookie('id'), depth: 3}, function (data) {
 						console.log("matched color(s)");
 						console.log(data)
 						if (data === "Error") {
@@ -58,7 +58,7 @@
 						} else {
 							displayImgs(data);
 						}
-					})
+					}, "json")
 				});
 
 				$(document).keydown(function (e) {
@@ -89,11 +89,13 @@
 							itemSelector: ".item"
 						});
 					});
+					$("#resultsDiv").masonry('reload');
 				}
 
 				var loadImages = function (data) { //data is an array of images
+					console.log(data);
 					for (i in data) {
-						var imgSrc = data[i];
+						var imgSrc = data[i].url;
 						var toAppend = "<div class='item'><a href='"+imgSrc+"' target='_blank'><img src='"+imgSrc+"'></img></a></div>";
 						$("#resultsDiv").append(toAppend);
 					}
@@ -111,7 +113,6 @@
 
 				var testImgs = []
 				testImgs.push("http://denver.mylittlefacewhen.com/media/f/img/mlfw4796-1335816425456.png");
-				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/img/mlfw3280-1330720074608.png");
 				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/img/mlfw282_tumblr_lkuf6sHX4s1qj4uijo1_500.png");
 				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/img/mlfw4999-13374372996473.gif");
 				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/rsz/mlfw4974_huge.png");
@@ -119,9 +120,17 @@
 				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/img/mlfw5003-tumblr_lk6wz3tbxg1qaha6c.png");
 				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/img/mlfw4822-13369295685608.png");
 
+				//holy test trinity
+				//pinkiepie
+				testImgs.push("http://pages.stern.nyu.edu/~kkc273/PinkiePieHiRes.png");
+				//applejack
+				testImgs.push("https://lh5.googleusercontent.com/-mHBd2g_xjGc/T7ZdResTFDI/AAAAAAAAKXU/w1ch4uwMYZk/s699/request___applejack_by_dentist73548-d4d43mx.png");
+
+				//rainbowdash
+				testImgs.push("http://scranton.mylittlefacewhen.com/media/f/img/mlfw3280-1330720074608.png");
 
 				//Test the masonry
-				loadImages(testImgs)
+				//loadImages(testImgs)
 
 
 				
