@@ -6,8 +6,9 @@ import urllib2
 def fetch_and_extract_colors(url):
     response = urllib2.urlopen(url)
     virtual_file = StringIO(response.read())
-
-    [{'value':color.value, 'score':color.prominence}for color in colorific extract_colors(virtual_file)]
+    palette = colorific.extract_colors(virtual_file)
+    colors = palette.colors
+    return [{'value':color.value, 'score':color.prominence} for color in colors]
 
 
 def hex_to_rgb(hexstr):
