@@ -17,6 +17,7 @@ class add:
   def POST(self):
     i = web.input()
     url = str(i.url)
+    print url
     treeName = str(i.treeName)
     colorListYUV = paletteAnalysis(url)
     for color in colorListYUV:
@@ -26,11 +27,11 @@ class add:
     i = web.input()
     url = str(i.url)
     treeName = str(i.treeName)
+    callback = str(i.callback)
     colorListYUV = paletteAnalysis(url)
     #colorListYUV = [ {'value': (1,2)} , {'value': (4,7)}, {'value': (3, 4)} ]
     for color in colorListYUV:
       store(color['value'], {'url': url}, treeName)
-    callback = str(i.callback)
     return "%s(%s)" % (callback, json.dumps({'status': 'ok'}))
 
 class match:
