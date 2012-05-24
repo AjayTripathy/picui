@@ -125,7 +125,7 @@ class KDTree():
     
     @staticmethod
     def clone_tree(tree):
-        return KDTree.construct_from_data(tree.get_points)
+        return KDTree.construct_from_data(tree.get_points())
 
     @staticmethod
     def construct_from_data(data):
