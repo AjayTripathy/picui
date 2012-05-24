@@ -39,7 +39,12 @@
 					console.log("submitting an image");
 					$.post(server+"/add", {url: $("#imglocation").val(), id: $.cookie('id')}, function (data) {
 						console.log("inserted photo");
-						$("#imglocation").val("");
+						console.log(data);
+						if (data === "Error") {
+							console.log("something went wrong");
+						} else {
+							$("#imglocation").val("");
+						}
 					});
 				});
 
@@ -48,7 +53,11 @@
 					$.post(server+"/match", {colors: [$("#colorPicker").val()], id: $.cookie('id'), depth: 20}, function (data) {
 						console.log("matched color(s)");
 						console.log(data)
-						displayImgs(data);
+						if (data === "Error") {
+							console.log("ERROR");
+						} else {
+							displayImgs(data);
+						}
 					})
 				});
 

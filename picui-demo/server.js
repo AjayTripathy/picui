@@ -36,7 +36,11 @@ server.post("/add", function (req, res) {
 		body: JSON.stringify({'url' : url, 'treeName' : id})
 	}, function (error, response, body) {
 		console.log("sent woo");
-		res.send(body);
+		if (response.statusCode !== 200) {
+			res.send("Error");
+		} else {
+			res.send(response.statusCode);
+		}
 	});
 });
 
@@ -52,7 +56,11 @@ server.post("/match", function (req, res) {
 		body: JSON.stringify({'colors' : colors, 'limit' : depth, 'treeName' : id })
 	}, function (error, response, body) {
 		console.log("sent");
-		res.send(body);
+		if (response.statusCode !== 200) {
+			res.send("Error");
+		} else {
+			res.send(body);
+		}
 	});
 });
 
