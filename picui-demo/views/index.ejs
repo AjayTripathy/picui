@@ -16,6 +16,8 @@
 		<script src="static/js/jquery-1.7.2.min.js"></script>
 		<script src="static/js/jquery.miniColors.js"></script>
 		<script src="static/js/jquery.masonry.min.js"></script>
+		<script src="static/js/jquery.cookie.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
 
 		<!-- HTML5 shim which I have never testedß -->
 		<!--[if lt IE 9]>
@@ -24,11 +26,18 @@
 
 		<script>
 			$(document).ready(function () {
+				var socket = io.connect('http://localhost');
+
+				socket.on('id', function (data) {
+					console.log("Storing my ID: "+data);
+					$.cookie('id', data);
+				});
+
 				var server = "http://localhost"; //FILL ME IN WITH THE SERVER LOCATION!!!!
 
 				$("#submitimg").click(function () {
 					console.log("submitting an image");
-					$.post(server+"/add", {url: $("#imglocation").val()}, function (data) {
+					$.post(server+"/add", {url: $("#imglocation").val(), id: $.cookie('id')}, function (data) {
 						console.log("inserted photo");
 						$("#imglocation").val("");
 					});
@@ -36,7 +45,7 @@
 
 				$("#submitcolor").click(function () {
 					console.log("submitting a color");
-					$.post(server+"/match", {colors: [$("#colorPicker").val()]}, function (data) {
+					$.post(server+"/match", {colors: [$("#colorPicker").val()], id: $.cookie('id'), depth: 5}, function (data) {
 						console.log("matched color(s)");
 						console.log(data)
 						displayImgs(data);
