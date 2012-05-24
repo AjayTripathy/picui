@@ -189,3 +189,16 @@ class KDTree():
         #print statistics
         return result
 
+    def get_points(self):
+        def get_points_helper(node):
+            points = []
+            if(node.left):
+                points + get_points_helper(node.left)
+
+            points.append(node.point)
+
+            if(node.right):
+                point + get_points_helper(node.right)
+
+            return points
+        return get_points_helper(self.root_node)
