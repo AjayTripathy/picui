@@ -36,10 +36,14 @@ server.post("/add", function (req, res) {
 		form: {'url' : url, 'treeName' : id}
 	}, function (error, response, body) {
 		console.log("sent woo");
-		if (response.statusCode !== 200) {
-			res.send("Error");
+		if (response !== undefined) {
+			if (response.statusCode !== 200) {
+				res.send("Error");
+			} else {
+				res.send(response.statusCode);
+			}
 		} else {
-			res.send(response.statusCode);
+			res.send("Error");
 		}
 	});
 });
@@ -56,10 +60,15 @@ server.post("/match", function (req, res) {
 		qs: {'colors' : JSON.stringify(colors), 'limit' : depth, 'treeName' : id }
 	}, function (error, response, body) {
 		console.log("sent");
-		if (response.statusCode !== 200) {
-			res.send("Error");
+		if (response !== undefined) {
+			if (response.statusCode !== 200) {
+				res.send("Error");
+			} else {
+				console.log(body)
+				res.send(body);
+			}
 		} else {
-			res.send(body);
+			res.send("Error");
 		}
 	});
 });

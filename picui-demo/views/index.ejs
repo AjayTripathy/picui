@@ -26,6 +26,8 @@
 
 		<script>
 			$(document).ready(function () {
+				var displayedBefore = false
+
 				var socket = io.connect('http://localhost');
 
 				socket.on('id', function (data) {
@@ -89,7 +91,11 @@
 							itemSelector: ".item"
 						});
 					});
-					$("#resultsDiv").masonry('reload');
+					if (displayedBefore === false) {
+						displayedBefore = true;
+					} else {
+						$("#resultsDiv").masonry('reload');
+					}
 				}
 
 				var loadImages = function (data) { //data is an array of images
