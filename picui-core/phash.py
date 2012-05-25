@@ -1,4 +1,5 @@
 import Image
+import ImageFilter
 from bitarray import bitarray
 
 class ImageHash(object):
@@ -39,8 +40,28 @@ class ImageHash(object):
 			value = 1 if pixel > avg else 0
 			diff.append(str(value))
 
-		
+		ba = bitarray("".join(diff), endian="little")
+		return ba.tobytes().encode('hex')
 
+	def edge_hash(self):
+		image = self.image.filter(ImageFilter.CONTOUR).resize((32,32), Image.NEAREST).convert("L")
+		#pixels = list(image.getdata())
+		pixels = image.load()
+		width, height = image.size
+
+		reduced = []
+
+		for i in range(0,8):
+			for j in range(0,8):
+				reduced.append(pixels[i,j])
+
+
+		avg = (sum(reduced) - reduced[0]) / (len(reduced) - 1)
+		diff = []
+
+		for pixel in reduced:
+			value = 1 if pixel > avg else 0
+			diff.append(str(value))
 
 		ba = bitarray("".join(diff), endian="little")
 		return ba.tobytes().encode('hex')
@@ -57,8 +78,8 @@ def hamming_distance(image1, image2): #image1 and image2 are two bitarrays encod
 
 if __name__ == "__main__":
 	print "STARTING"
-	hash1 = ImageHash('obama1.jpg').dct_hash()
-	hash2 = ImageHash('pp.png').dct_hash()
+	hash1 = ImageHash('pp.png').edge_hash()
+	hash2 = ImageHash('obama2.jpg').edge_hash()
 	print hash1
 	print hash2
 	print hamming_distance(hash1,hash2)
