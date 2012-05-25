@@ -44,20 +44,31 @@ class match:
     limit = int(i.limit)
     treeName = str(i.treeName)
     response = []
+    totalScore = {}
     for c in colors:
       RGB = imaging.hex_to_rgb(c)
       color = imaging.rgb_to_yuv(RGB)
       matchList = lookup(color['value'], limit, treeName)
       matchList.sort(key = lambda col: col['score'] * 1/(k.square_distance(color['value'], col['value'])) , reverse = True)
-      print matchList
+      #print matchList
       checkDuplicates = set()
-      response = []
+      #response = []
       for col in matchList:
         if (not (col['url'] in checkDuplicates)):
            checkDuplicates.add(col['url'])
-           response.append(col)
-        
-
+           #response.append(col)
+           if (not (col['url'] in totalScore)):
+              total = col['score'] * 1/(k.square_distance(color['value'], col['value']))
+              col['total'] = total
+              totalScore[col['url']] = col
+           else:
+              total = totalScore[col['url']]['total'] + col['score'] * 1/(k.square_distance(color['value'], col['value']))
+              col['total'] = total
+              totalScore[col['url']] = col
+    print 'totalscore.values'
+    response = totalScore.values()
+    response.sort(key = lambda col: col['total'] , reverse = True)
+    
     response = json.dumps(response)
     if('callback' in dir(i)):
       callback = str(i.callback)
