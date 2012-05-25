@@ -16,13 +16,15 @@ db = shelve.open('./tree', writeback = True)
 class add:
   def POST(self):
     i = web.input()
+    for f in i:
+      print f
     url = str(i.url)
     print url
     treeName = str(i.treeName)
     colorListYUV = paletteAnalysis(url)
     for color in colorListYUV:
-      store(color['value'], {'url': url}, treeName)
-    return {'status':'ok'}
+      store(color['value'], {'url': url, 'score': color['score'], 'value': color['value']}, treeName)
+    return json.dumps({'status':'ok'})
   def GET(self):
     i = web.input()
     url = str(i.url)
@@ -31,7 +33,7 @@ class add:
     colorListYUV = paletteAnalysis(url)
     #colorListYUV = [ {'value': (1,2)} , {'value': (4,7)}, {'value': (3, 4)} ]
     for color in colorListYUV:
-      store(color['value'], {'url': url}, treeName)
+      store(color['value'], {'url': url, 'score' : color['score'], 'value': color['value'] }, treeName)
     return "%s(%s)" % (callback, json.dumps({'status': 'ok'}))
 
 class match:
@@ -41,12 +43,23 @@ class match:
     colors = json.loads(colors)
     limit = int(i.limit)
     treeName = str(i.treeName)
+    response = []
     for c in colors:
       RGB = imaging.hex_to_rgb(c)
       color = imaging.rgb_to_yuv(RGB)
-      response = lookup(color['value'], limit, treeName)
-      response = json.dumps(response)
-    if(i.callback != None):
+      matchList = lookup(color['value'], limit, treeName)
+      matchList.sort(key = lambda col: col['score'] * 1/(k.square_distance(color['value'], col['value'])) , reverse = True)
+      print matchList
+      checkDuplicates = set()
+      response = []
+      for col in matchList:
+        if (not (col['url'] in checkDuplicates)):
+           checkDuplicates.add(col['url'])
+           response.append(col)
+        
+
+    response = json.dumps(response)
+    if('callback' in dir(i)):
       callback = str(i.callback)
       return "%s(%s)" % (callback, response)
     else:
@@ -64,7 +77,6 @@ def lookup(point, limit, treeName):
 def store(tup,data,treeName):
   if (treeName in db):
     tree = db[treeName]
-    print tree.root_node.right
     tree.add(k.Point(tup, data))
     #db[treeName] = tree
   else: 
