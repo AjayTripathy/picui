@@ -1,6 +1,9 @@
 import Image
 import ImageFilter
 from bitarray import bitarray
+import scipy
+from scipy import ndimage
+from scipy import misc
 
 class ImageHash(object):
 	def __init__(self, path, size=8):
@@ -68,7 +71,17 @@ class ImageHash(object):
 
 	def blur_hash(self):
 
-		image = self.image.filter(ImageFilter.BLUR).filter(ImageFilter.CONTOUR).resize((32,32), Image.NEAREST).convert("L")
+		'''
+		tempPixels = misc.fromimage(self.image)
+		tempArray = ndimage.gaussian_filter(tempPixels, sigma=3)
+		temp = misc.toimage(tempArray)
+		temp.save("BLUR.jpg","JPEG")
+		'''
+
+		#temp = misc.toimage(ndimage.gaussian_filter(misc.fromimage(self.image),sigma=3))
+		#temp.save("BLUR.jpg","JPEG")
+
+		image = color_blur(self.image).filter(ImageFilter.CONTOUR).resize((32,32), Image.NEAREST).convert("L")
 		#pixels = list(image.getdata())
 		pixels = image.load()
 		width, height = image.size
@@ -100,10 +113,23 @@ def hamming_distance(image1, image2): #image1 and image2 are two bitarrays encod
 			dist += 1
 	return dist
 
+
+def color_blur(image):
+	im = scipy.array(image)
+	im2 = scipy.zeros(im.shape)
+
+	for i in range(3):
+		im2[:,:,i] = ndimage.filters.gaussian_filter(im[:,:,i],5)
+
+	#im2 = scipy.uint8(im2)
+	toReturn = misc.toimage(im2)
+	toReturn.save("BLUR.jpg","JPEG")
+	return toReturn
+
 if __name__ == "__main__":
 	print "STARTING"
 	hash1 = ImageHash('sample_images/PinkiePieHiRes.png').blur_hash()
-	hash2 = ImageHash('sample_images/obama3.jpg').edge_hash()
+	hash2 = ImageHash('sample_images/pp2.png').edge_hash()
 	print hash1
 	print hash2
 	print hamming_distance(hash1,hash2)
