@@ -15,6 +15,10 @@ def fetch_and_extract_colors(url):
     return [{'value':color.value, 'score':color.prominence} for color in colors]
 
 
+def image_similarity(url1, url2):
+    return hamming_distance(blur_and_edge_hash(url1), edge_hash(url2))
+
+
 def blur_and_edge_hash(url):
     imfile = fetch_image_as_file(url)
     return phash.ImageHash(imfile).blur_hash()
