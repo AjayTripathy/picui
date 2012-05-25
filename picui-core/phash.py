@@ -21,17 +21,26 @@ class ImageHash(object):
 
 	def dct_hash(self):
 		image = self.image.resize((32,32), Image.NEAREST).convert("L")
-		pixels = list(image.getdata())
-		reduced = []
-		for i in range(0,64):
-			reduced.append(pixels[i])
+		#pixels = list(image.getdata())
+		pixels = image.load()
+		width, height = image.size
 
-		avg = (sum(reduced) - reduced[0]) / len(reduced)
+		reduced = []
+
+		for i in range(0,8):
+			for j in range(0,8):
+				reduced.append(pixels[i,j])
+
+
+		avg = (sum(reduced) - reduced[0]) / (len(reduced) - 1)
 		diff = []
 
 		for pixel in reduced:
 			value = 1 if pixel > avg else 0
 			diff.append(str(value))
+
+		
+
 
 		ba = bitarray("".join(diff), endian="little")
 		return ba.tobytes().encode('hex')
