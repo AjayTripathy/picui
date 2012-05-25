@@ -55,3 +55,7 @@ h2 {
 #footerText a {
 	color: #C9446F;
 }
+
+#doublePickerDiv {
+	display: none;
+}

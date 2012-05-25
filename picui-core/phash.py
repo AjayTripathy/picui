@@ -128,8 +128,8 @@ def color_blur(image):
 
 if __name__ == "__main__":
 	print "STARTING"
-	hash1 = ImageHash('sample_images/PinkiePieHiRes.png').blur_hash()
-	hash2 = ImageHash('sample_images/pp2.png').edge_hash()
+	hash1 = ImageHash('sample_images/obama1.jpg').blur_hash()
+	hash2 = ImageHash('sample_images/obama2.jpg').blur_hash()
 	print hash1
 	print hash2
 	print hamming_distance(hash1,hash2)

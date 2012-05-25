@@ -63,6 +63,19 @@
 					}, "json")
 				});
 
+				$("#submitdoublecolor").click(function () {
+					console.log("submitting a color");
+					$.post(server+"/match", {colors: [$("#doublePicker1").val(), $("#doublePicker2").val()], id: $.cookie('id'), depth: 3}, function (data) {
+						console.log("matched color(s)");
+						console.log(data)
+						if (data === "Error") {
+							console.log("ERROR");
+						} else {
+							displayImgs(data);
+						}
+					}, "json")
+				});
+
 				$(document).keydown(function (e) {
 					if (e.which === 13) {
 						var focusId = $(document.activeElement).attr('id');
@@ -76,6 +89,8 @@
 				})
 
 				$("#colorPicker").miniColors();
+				$("#doublePicker1").miniColors();
+				$("#doublePicker2").miniColors();
 
 				/*
 				$("#resultsDiv").masonry({
@@ -138,11 +153,26 @@
 				//Test the masonry
 				//loadImages(testImgs)
 
+				$("#selectDouble").click(function () {
+					console.log("Move to double");
+					$("#singlePickerDiv").slideToggle();
+					$("#doublePickerDiv").slideToggle();
+					$("#selectSingle").attr("class","");
+					$("#selectDouble").attr("class","active");
+				});
 
+				$("#selectSingle").click(function () {
+					console.log("Move to double");
+					$("#singlePickerDiv").slideToggle();
+					$("#doublePickerDiv").slideToggle();
+					$("#selectSingle").attr("class","active");
+					$("#selectDouble").attr("class","");
+				});
 				
 			});
 
 		</script>
+
 	</head>
 
 	<body>
@@ -156,19 +186,45 @@
 				<div class="span6">
 					<h2>Upload here.</h2>
 					<div class="well">
-						<label>Link to an image:</label>
-						<input type="text" id="imglocation" class="span3" placeholder="http://www.imgur.com/rainbowdash.jpg"></input>
-						<p></p>
-						<button type="submit" id="submitimg" class="btn btn-primary">Submit</button>
+						<div id="imageLinkDiv">
+							<label>Link to an image:</label>
+							<input type="text" id="imglocation" class="span3" placeholder="http://www.imgur.com/rainbowdash.jpg"></input>
+							<p></p>
+							<button type="submit" id="submitimg" class="btn btn-primary">Submit</button>
+						</div>
+						<div class="pagination">
+							<ul>
+								<li class="active"><a href="#">Link</a></li>
+								<li><a href="#">Upload</a></li>
+							</ul>
+						</div>
 					</div>
 				</div>
 				<div class="span6">
 					<h2>Search here.</h2>
 					<div class="well">
-						<label>Pick a color below:</label>
-						<input id="colorPicker"></input>
-						<p></p>
-						<button type="submit" id="submitcolor" class="btn btn-primary">Submit</button>
+						<div id="singlePickerDiv">
+							<label>Pick a color below:</label>
+							<input id="colorPicker"></input>
+							<p></p>
+							<button type="submit" id="submitcolor" class="btn btn-primary">Submit</button>
+						</div>
+
+						<div id="doublePickerDiv">
+							<label>Pick two colors below:</label>
+							<input id="doublePicker1"></input>
+							<input id="doublePicker2"></input>
+							<p></p>
+							<button type="submit" id="submitdoublecolor" class="btn btn-primary">Submit</button>
+						</div>
+
+						<div class="pagination">
+							<ul>
+								<li id="selectSingle" class="active"><a href="#">Single</a></li>
+								<li id="selectDouble"><a href="#">Double</a></li>
+								<li><a href="#">Draw</a></li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
