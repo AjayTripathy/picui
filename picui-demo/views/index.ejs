@@ -17,6 +17,9 @@
 		<script src="static/js/jquery.miniColors.js"></script>
 		<script src="static/js/jquery.masonry.min.js"></script>
 		<script src="static/js/jquery.cookie.js"></script>
+		<script src="static/js/sketch.js"></script>
+		<script src="static/js/canvas2image.js"></script>
+		<script src="static/js/base64.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 
 		<!-- HTML5 shim which I have never testedß -->
@@ -91,6 +94,7 @@
 				$("#colorPicker").miniColors();
 				$("#doublePicker1").miniColors();
 				$("#doublePicker2").miniColors();
+				$("#drawColorPicker").miniColors();
 
 				/*
 				$("#resultsDiv").masonry({
@@ -154,20 +158,64 @@
 				//loadImages(testImgs)
 
 				$("#selectDouble").click(function () {
-					console.log("Move to double");
-					$("#singlePickerDiv").slideToggle();
-					$("#doublePickerDiv").slideToggle();
+					$("#singlePickerDiv").slideUp();
+					$("#drawingDiv").slideUp();
+					$("#doublePickerDiv").slideDown();
 					$("#selectSingle").attr("class","");
 					$("#selectDouble").attr("class","active");
+					$("#selectDrawing").attr("class","");
 				});
 
 				$("#selectSingle").click(function () {
-					console.log("Move to double");
-					$("#singlePickerDiv").slideToggle();
-					$("#doublePickerDiv").slideToggle();
+					$("#singlePickerDiv").slideDown();
+					$("#doublePickerDiv").slideUp();
+					$("#drawingDiv").slideUp();
 					$("#selectSingle").attr("class","active");
 					$("#selectDouble").attr("class","");
+					$("#selectDrawing").attr("class","");
 				});
+
+				$("#selectDrawing").click(function () {
+					$("#singlePickerDiv").slideUp();
+					$("#doublePickerDiv").slideUp();
+					$("#drawingDiv").slideDown();
+					$("#selectDrawing").attr("class","active");
+					$("#selectDouble").attr("class","");
+					$("#selectSingle").attr("class","");
+				});
+
+				$("#sketchpad").sketch();
+
+				var changeBrushColor = function () {
+					var sketch = $("#sketchpad").sketch();
+					sketch.set("color",$("#drawColorPicker").val());
+				}
+
+				var changeBrushSize = function () {
+					var sketch = $("#sketchpad").sketch();
+					sketch.set("size",$("#drawSizePicker").val());
+				}
+
+				$("#drawColorPicker").blur(function () {
+					changeBrushColor();
+				});
+
+				$("#submitdrawing").click(function () {
+					console.log("Submitting a drawing...");
+					var canvasElement = document.getElementById("sketchpad");
+					var encodedImg = canvasElement.toDataURL();
+					$.get("/submitDrawing", {
+						image : encodedImg,
+						id : $.cookie("id"),
+						depth: 3
+					}, function (data) {
+						console.log("Received something back.");
+						console.log(data)
+					});
+					//var imageGenerated = Canvas2Image.saveAsPNG(canvasElement, true);
+					//canvasElement.parentNode.replaceChild(imageGenerated,canvasElement)
+
+				})
 				
 			});
 
@@ -218,11 +266,19 @@
 							<button type="submit" id="submitdoublecolor" class="btn btn-primary">Submit</button>
 						</div>
 
+						<div id="drawingDiv">
+							<label>Draw below:</label>
+							<canvas id="sketchpad" width="500" height="500"></canvas>
+							<input id="drawColorPicker"></input>
+							<input id="drawSizePicker"></input>
+							<button type="submit" id="submitdrawing" class="btn btn-primary">Submit</button>
+						</div>
+
 						<div class="pagination">
 							<ul>
 								<li id="selectSingle" class="active"><a href="#">Single</a></li>
 								<li id="selectDouble"><a href="#">Double</a></li>
-								<li><a href="#">Draw</a></li>
+								<li id="selectDrawing"><a href="#">Draw</a></li>
 							</ul>
 						</div>
 					</div>

@@ -1,6 +1,8 @@
 var express = require('express');
 var request = require('request');
 var socketio = require('socket.io');
+var fs = require('fs');
+var formidable = require('formidable');
 
 var server = express.createServer();
 
@@ -65,6 +67,46 @@ server.post("/match", function (req, res) {
 				res.send("Error");
 			} else {
 				console.log(body)
+				res.send(body);
+			}
+		} else {
+			res.send("Error");
+		}
+	});
+});
+
+server.post("/uploadDrawing", function (req, res) {
+	console.log("uploading drawing");
+	console.log(req.body.image);
+	var id = req.body.title
+	var base64Data = req.body.image.replace(/^data:image\/png;base64,/,"");
+	var dataBuffer = new Buffer(base64Data, 'base64');
+
+	fs.writeFile(id+".png", dataBuffer, function (err) {
+		if (err !== null) {
+			console.log(err);
+		}
+	});
+})
+
+server.get("/submitDrawing", function (req, res) {
+	console.log("submitting drawing");
+	var id = req.query.id;
+	var base64Data = req.query.image.replace(/^data:image\/png;base64,/,"");
+
+	console.log(base64Data);
+	var depth = req.query.depth;
+
+	request.get({
+		uri: coreServer+"/match",
+		qs: {'limit' : depth, 'treeName' : id, 'referenceImg' : base64Data }
+	}, function (error, response, body) {
+		console.log("sent a match for a drawing");
+		if (response !== undefined) {
+			if (response.statusCode !== 200) {
+				res.send("Error");
+			} else {
+				console.log(body);
 				res.send(body);
 			}
 		} else {
