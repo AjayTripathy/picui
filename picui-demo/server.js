@@ -92,11 +92,10 @@ server.post("/uploadDrawing", function (req, res) {
 server.get("/submitDrawing", function (req, res) {
 	console.log("submitting drawing");
 	var id = req.query.id;
-	var base64Data = req.query.image;
-	var depth = req.query.depth;
+	var base64Data = req.query.image.replace(/^data:image\/png;base64,/,"");
 
-	var combined = id+base64Data+depth
-	console.log(combined.length);
+	console.log(base64Data);
+	var depth = req.query.depth;
 
 	request.get({
 		uri: coreServer+"/match",

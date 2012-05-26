@@ -94,6 +94,7 @@
 				$("#colorPicker").miniColors();
 				$("#doublePicker1").miniColors();
 				$("#doublePicker2").miniColors();
+				$("#drawColorPicker").miniColors();
 
 				/*
 				$("#resultsDiv").masonry({
@@ -185,19 +186,19 @@
 
 				$("#sketchpad").sketch();
 
-				$("#testSave").click(function () {
-					var canvasElement = document.getElementById("sketchpad");
-					var encodedImg = canvasElement.toDataURL();
-					$.post("/uploadDrawing", {
-						image : encodedImg,
-						title : $.cookie("id")
-					}, function (data) {
+				var changeBrushColor = function () {
+					var sketch = $("#sketchpad").sketch();
+					sketch.set("color",$("#drawColorPicker").val());
+				}
 
-					});
-					//var imageGenerated = Canvas2Image.saveAsPNG(canvasElement, true);
-					//canvasElement.parentNode.replaceChild(imageGenerated,canvasElement)
+				var changeBrushSize = function () {
+					var sketch = $("#sketchpad").sketch();
+					sketch.set("size",$("#drawSizePicker").val());
+				}
 
-				})
+				$("#drawColorPicker").blur(function () {
+					changeBrushColor();
+				});
 
 				$("#submitdrawing").click(function () {
 					console.log("Submitting a drawing...");
@@ -268,7 +269,8 @@
 						<div id="drawingDiv">
 							<label>Draw below:</label>
 							<canvas id="sketchpad" width="500" height="500"></canvas>
-							<button type="submit" id="testSave" class="btn">TEST SAVE</button>
+							<input id="drawColorPicker"></input>
+							<input id="drawSizePicker"></input>
 							<button type="submit" id="submitdrawing" class="btn btn-primary">Submit</button>
 						</div>
 
