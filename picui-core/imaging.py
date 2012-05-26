@@ -2,30 +2,47 @@ import colorific
 from StringIO import StringIO
 import phash
 import urllib2
+import base64
 
 def fetch_image_as_file(url):
     response = urllib2.urlopen(url)
     pseudofile = StringIO(response.read())
     return pseudofile
 
-def fetch_and_extract_colors(url):
-    imfile = fetch_image_as_file(url)
+
+def read_base64_as_file(b64str):
+    return StringIO(base64.b64decode(b64str))
+
+
+def fetch_and_extract_colors(file_ref, is_url):
+    if is_url:
+        imfile = fetch_image_as_file(file_ref)
+    else:
+        imfile = read_base64_as_file(file_ref)
+
     palette = colorific.extract_colors(imfile)
     colors = palette.colors
     return [{'value':color.value, 'score':color.prominence} for color in colors]
 
 
-def image_similarity(url1, url2):
-    return hamming_distance(blur_and_edge_hash(url1), edge_hash(url2))
+def image_similarity(file_ref1, file_ref2):
+    return hamming_distance(blur_and_edge_hash(file_ref1), edge_hash(file_ref2))
 
 
-def blur_and_edge_hash(url):
-    imfile = fetch_image_as_file(url)
+def blur_and_edge_hash(file_ref, is_url):
+    if is_url:
+        imfile = fetch_image_as_file(file_ref)
+    else:
+        imfile = read_base64_as_file(file_ref)
+
     return phash.ImageHash(imfile).blur_hash()
 
 
-def edge_hash(url):
-    imfile = fetch_image_as_file(url)
+def edge_hash(file_ref, is_url):
+    if is_url:
+        imfile = fetch_image_as_file(file_ref)
+    else:
+        imfile = read_base64_as_file(file_ref)
     return phash.ImageHash(imfile).edge_hash()
 
 
