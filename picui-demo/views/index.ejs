@@ -196,8 +196,26 @@
 					sketch.set("size",$("#drawSizePicker").val());
 				}
 
-				$("#drawColorPicker").blur(function () {
-					changeBrushColor();
+				var useEraser = function () {
+					var sketch = $("#sketchpad").sketch();
+					sketch.set("tool", "eraser");
+				}
+
+				var useMarker = function () {
+					var sketch = $("#sketchpad").sketch();
+					sketch.set("tool","marker");
+				}
+
+				$("#updateSize").click(function () {
+					changeBrushSize();
+				});
+
+				$("#useEraser").click(function () {
+					useEraser();
+				});
+
+				$("#useMarker").click(function () {
+					useMarker();
 				});
 
 				$("#submitdrawing").click(function () {
@@ -270,7 +288,12 @@
 							<label>Draw below:</label>
 							<canvas id="sketchpad" width="500" height="500"></canvas>
 							<input id="drawColorPicker"></input>
+							<button type="submit" id="updateColor" class="btn">Update Color</button>
 							<input id="drawSizePicker"></input>
+							<button type="submit" id="updateSize" class="btn">Update Size</button>
+							<button type="submit" id="useEraser" class="btn">Use Eraser</button>
+							<button type="submit" id="useMarker" class="btn">Use Marker</button>
+							<br>
 							<button type="submit" id="submitdrawing" class="btn btn-primary">Submit</button>
 						</div>
 
